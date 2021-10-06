@@ -1,24 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Header from "./components/Header";
+import FirstStep from "./components/FirstStep";
+import SecondStep from "./components/SecondStep";
+import ThirdStep from "./components/ThirdStep";
+import Login from "./components/Login";
 
 function App() {
+  const [user, setUser] = useState({});
+
+  const updateUser = (data) => {
+    setUser((prevUser) => ({ ...prevUser, ...data }));
+  };
+
+  const resetUser = () => {
+    setUser({});
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="container">
+        <Header />
+        <Switch>
+          <Route
+            render={(props) => (
+              <FirstStep {...props} user={user} updateUser={updateUser} />
+            )}
+            path="/"
+            exact={true}
+          />
+          <Route
+            render={(props) => (
+              <SecondStep {...props} user={user} updateUser={updateUser} />
+            )}
+            path="/second"
+          />
+          <Route
+            render={(props) => (
+              <ThirdStep
+                {...props}
+                user={user}
+                updateUser={updateUser}
+                resetUser={resetUser}
+              />
+            )}
+            path="/third"
+          />
+          <Route component={Login} path="/login" />
+          <Route render={() => <Redirect to="/" />} />
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
