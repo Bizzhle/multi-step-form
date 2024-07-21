@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import csc from "country-state-city";
+import { Country } from "country-state-city";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_API_URL } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 function ThirdStep(props) {
+  const navigate = useNavigate();
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
@@ -19,14 +20,13 @@ function ThirdStep(props) {
     const getCountries = async () => {
       try {
         setIsLoading(true);
-        const result = await csc.getAllCountries();
+        const result = await Country.getAllCountries();
         let allCountries = [];
         allCountries = result?.map(({ isoCode, name }) => ({ isoCode, name }));
         const [{ isoCode: firstCountry } = {}] = allCountries;
         setCountries(allCountries);
         setSelectedCountry(firstCountry);
         setIsLoading(false);
-        console.log(result);
       } catch (error) {
         setCountries([]);
         setIsLoading(false);
@@ -39,10 +39,9 @@ function ThirdStep(props) {
   useEffect(() => {
     const getStates = async () => {
       try {
-        const result = await csc.getStatesOfCountry(selectedCountry);
+        const result = await Country.getStatesOfCountry(selectedCountry);
         let allStates = [];
         allStates = result?.map(({ isoCode, name }) => ({ isoCode, name }));
-        console.log({ allStates });
         const [{ isoCode: firstState = "" } = {}] = allStates;
         setCities([]);
         setSelectedCity("");
@@ -61,7 +60,7 @@ function ThirdStep(props) {
   useEffect(() => {
     const getCities = async () => {
       try {
-        const result = await csc.getCitiesOfState(
+        const result = await Country.getCitiesOfState(
           selectedCountry,
           selectedState
         );
@@ -93,15 +92,21 @@ function ThirdStep(props) {
         city: selectedCity,
       };
 
-      await axios.post(`${BASE_API_URL}/register`, {
-        ...user,
-        ...updatedData,
-      });
+      await axios.post(
+        `${BASE_API_URL}/auth/register`,
+        {
+          ...user,
+          ...updatedData,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       Swal.fire("Awesome!", "You're successfully registered!", "success").then(
         (result) => {
           if (result.isConfirmed || result.isDismissed) {
             props.resetUser();
-            props.history.push("/");
+            navigate("/login");
           }
         }
       );

@@ -2,17 +2,23 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
 import { motion } from "framer-motion"; // to add sliding animation
+import { useNavigate } from "react-router-dom";
 
 function FirstStep(props) {
-  const { user } = props;
+  const { user = {} } = props;
+  const navigate = useNavigate();
   const { register, handleSubmit, errors } = useForm({
-    defaultValues: { first_name: user.first_name, last_name: user.last_name },
+    defaultValues: {
+      firstName: user.firstNamee || "",
+      lastName: user.lastName || "",
+    },
   });
 
   const onSubmit = (data) => {
     props.updateUser(data);
-    props.history.push("/second"); // history comes with router and allows to use the next button to move to next page
+    navigate("/second"); // history comes with router and allows to use the next button to move to next page
   };
+
   return (
     <Form className="input-form" onSubmit={handleSubmit(onSubmit)}>
       <motion.div
@@ -25,42 +31,40 @@ function FirstStep(props) {
           <Form.Label>First Name</Form.Label>
           <Form.Control
             type="text"
-            name="first_name"
             placeholder="Enter your first name"
             autoComplete="off"
-            ref={register({
+            {...register("firstName", {
               required: "First name is required.",
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "First name should contain only characters",
               },
             })}
-            className={`${errors.first_name ? "input-error" : ""}`}
+            // className={`${errors.first_name ? "input-error" : ""}`}
           />
-          {errors.first_name && (
+          {/* {errors.first_name && (
             <p className="errorMsg">{errors.first_name.message}</p>
-          )}
+          )} */}
         </Form.Group>
 
         <Form.Group controlId="last_name">
           <Form.Label>Last Name</Form.Label>
           <Form.Control
             type="text"
-            name="last_name"
             placeholder="Enter your last name"
             autoComplete="off"
-            ref={register({
+            {...register("lastName", {
               required: "Last name is required",
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "Last name should contain only characters.",
               },
             })}
-            className={`${errors.last_name ? "input-error" : ""}`}
+            // className={`${errors.last_name ? "input-error" : ""}`}
           />
-          {errors.last_name && (
+          {/* {errors.last_name && (
             <p className="errorMsg">{errors.last_name.message}</p>
-          )}
+          )} */}
         </Form.Group>
 
         <Button variant="primary" type="submit">

@@ -1,53 +1,50 @@
 import React, { useState } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import FirstStep from "./components/FirstStep";
 import SecondStep from "./components/SecondStep";
 import ThirdStep from "./components/ThirdStep";
 import Login from "./components/Login";
+import Home from "./components/Home";
 
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ firstName: "", lastName: "" });
 
   const updateUser = (data) => {
     setUser((prevUser) => ({ ...prevUser, ...data }));
   };
 
   const resetUser = () => {
-    setUser({});
+    setUser({ firstName: "", lastName: "" });
   };
   return (
     <BrowserRouter>
       <div className="container">
         <Header />
-        <Switch>
+        <Routes>
           <Route
-            render={(props) => (
-              <FirstStep {...props} user={user} updateUser={updateUser} />
-            )}
+            element={<FirstStep user={user} updateUser={updateUser} />}
             path="/"
             exact={true}
           />
           <Route
-            render={(props) => (
-              <SecondStep {...props} user={user} updateUser={updateUser} />
-            )}
+            element={<SecondStep user={user} updateUser={updateUser} />}
             path="/second"
           />
           <Route
-            render={(props) => (
+            element={
               <ThirdStep
-                {...props}
                 user={user}
                 updateUser={updateUser}
                 resetUser={resetUser}
               />
-            )}
+            }
             path="/third"
           />
-          <Route component={Login} path="/login" />
-          <Route render={() => <Redirect to="/" />} />
-        </Switch>
+          <Route element={<Login />} path="/login" />
+          <Route path="*" element={<Navigate to="/" />} />
+          <Route element={<Home />} path="/home" />
+        </Routes>
       </div>
     </BrowserRouter>
   );

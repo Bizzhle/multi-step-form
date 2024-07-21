@@ -1,14 +1,15 @@
 import React from "react";
-import { withRouter, Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const Progress = ({ location: { pathname } }) => {
+const Progress = () => {
+  const { pathname } = useLocation();
   const isFirstStep = pathname === "/";
   const isSecondStep = pathname === "/second";
   const isThirdStep = pathname === "/third";
   const isLoginPage = pathname === "/login";
 
   return (
-    <React.Fragment>
+    <>
       {!isLoginPage ? (
         <div className="steps">
           <div className={`${isFirstStep ? "step active" : "step"}`}>
@@ -35,8 +36,8 @@ const Progress = ({ location: { pathname } }) => {
       ) : (
         <div></div>
       )}
-    </React.Fragment>
+    </>
   );
 };
 
-export default withRouter(Progress);
+export default Progress;
