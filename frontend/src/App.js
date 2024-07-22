@@ -6,6 +6,7 @@ import SecondStep from "./components/SecondStep";
 import ThirdStep from "./components/ThirdStep";
 import Login from "./components/Login";
 import Home from "./components/Home";
+import { Registration } from "./components/Registration";
 
 function App() {
   const [user, setUser] = useState({ firstName: "", lastName: "" });
@@ -20,30 +21,15 @@ function App() {
   return (
     <BrowserRouter>
       <div className="container">
-        <Header />
         <Routes>
           <Route
-            element={<FirstStep user={user} updateUser={updateUser} />}
-            path="/"
-            exact={true}
+            element={<Registration user={user} updateUser={updateUser} />}
+            path="/registration/:id"
           />
-          <Route
-            element={<SecondStep user={user} updateUser={updateUser} />}
-            path="/second"
-          />
-          <Route
-            element={
-              <ThirdStep
-                user={user}
-                updateUser={updateUser}
-                resetUser={resetUser}
-              />
-            }
-            path="/third"
-          />
+
           <Route element={<Login />} path="/login" />
           <Route path="*" element={<Navigate to="/" />} />
-          <Route element={<Home />} path="/home" />
+          <Route element={<Home />} path="/" />
         </Routes>
       </div>
     </BrowserRouter>

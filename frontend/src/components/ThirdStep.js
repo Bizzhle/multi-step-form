@@ -4,7 +4,8 @@ import { Country } from "country-state-city";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { BASE_API_URL } from "../utils/constants";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import Progress from "./Progress";
 
 function ThirdStep(props) {
   const navigate = useNavigate();
@@ -123,78 +124,82 @@ function ThirdStep(props) {
   };
 
   return (
-    <Form className="input-form" onSubmit={handleSubmit}>
-      <div className="col-md-6 offset-md-3">
-        <Form.Group controlId="country">
-          {isLoading && <p>Loading countriees. please wait...</p>}
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            as="select"
-            name="country"
-            value={selectedCountry}
-            onChange={(e) => setSelectedCountry(e.target.value)}
-          >
-            {countries.map(({ isoCode, name }) => (
-              <option
-                value={isoCode}
-                key={isoCode}
-                className="col-md-6 offset-md-3"
-              >
-                {name}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="state">
-          <Form.Label>State</Form.Label>
-          <Form.Control
-            as="select"
-            name="state"
-            value={selectedState}
-            onChange={(event) => setSelectedState(event.target.value)}
-          >
-            {states.length > 0 ? (
-              states.map(({ isoCode, name }) => (
-                <option value={isoCode} key={isoCode}>
+    <>
+      <Progress />
+      <Form className="input-form" onSubmit={handleSubmit}>
+        <div className="col-md-6 offset-md-3">
+          <Form.Group controlId="country">
+            {isLoading && <p>Loading countriees. please wait...</p>}
+            <Form.Label>Country</Form.Label>
+            <Form.Control
+              as="select"
+              name="country"
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+            >
+              {countries.map(({ isoCode, name }) => (
+                <option
+                  value={isoCode}
+                  key={isoCode}
+                  className="col-md-6 offset-md-3"
+                >
                   {name}
                 </option>
-              ))
-            ) : (
-              <option value="" key="">
-                No state found
-              </option>
-            )}
-          </Form.Control>
-        </Form.Group>
+              ))}
+            </Form.Control>
+          </Form.Group>
 
-        <Form.Group controlId="city">
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            as="select"
-            name="city"
-            value={selectedCity}
-            onChange={(event) => setSelectedCity(event.target.value)}
-          >
-            {cities.length > 0 ? (
-              cities.map(({ name }) => (
-                <option value={name} key={name}>
-                  {name}
+          <Form.Group controlId="state">
+            <Form.Label>State</Form.Label>
+            <Form.Control
+              as="select"
+              name="state"
+              value={selectedState}
+              onChange={(event) => setSelectedState(event.target.value)}
+            >
+              {states.length > 0 ? (
+                states.map(({ isoCode, name }) => (
+                  <option value={isoCode} key={isoCode}>
+                    {name}
+                  </option>
+                ))
+              ) : (
+                <option value="" key="">
+                  No state found
                 </option>
-              ))
-            ) : (
-              <option value="" key="">
-                No cities found
-              </option>
-            )}
-          </Form.Control>
-        </Form.Group>
+              )}
+            </Form.Control>
+          </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Register
-        </Button>
-      </div>
-    </Form>
+          <Form.Group controlId="city">
+            <Form.Label>City</Form.Label>
+            <Form.Control
+              as="select"
+              name="city"
+              value={selectedCity}
+              onChange={(event) => setSelectedCity(event.target.value)}
+            >
+              {cities.length > 0 ? (
+                cities.map(({ name }) => (
+                  <option value={name} key={name}>
+                    {name}
+                  </option>
+                ))
+              ) : (
+                <option value="" key="">
+                  No cities found
+                </option>
+              )}
+            </Form.Control>
+          </Form.Group>
+
+          <Button variant="primary" type="submit">
+            Register
+          </Button>
+        </div>
+      </Form>
+      <Outlet />
+    </>
   );
 }
 

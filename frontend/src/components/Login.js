@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { BASE_API_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../utils/context/authContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,12 +12,14 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [userDetails, setUserDetails] = useState("");
+  const { setData } = useContext(UserContext);
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(`${BASE_API_URL}/auth/login`, data);
       setSuccessMessage("User with the provided credentials found");
       setUserDetails(response.data);
+      setData(response);
       navigate("/home");
     } catch (error) {
       if (error.response) {

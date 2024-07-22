@@ -3,9 +3,9 @@ import { Link, useLocation } from "react-router-dom";
 
 const Progress = () => {
   const { pathname } = useLocation();
-  const isFirstStep = pathname === "/";
-  const isSecondStep = pathname === "/second";
-  const isThirdStep = pathname === "/third";
+  const isFirstStep = pathname === "/registration/1";
+  const isSecondStep = pathname === "/registration/2";
+  const isThirdStep = pathname === "/registration/3";
   const isLoginPage = pathname === "/login";
 
   return (
@@ -16,7 +16,7 @@ const Progress = () => {
             <div>1</div>
             <div>
               {isSecondStep || isThirdStep ? (
-                <Link to="/">Step 1</Link>
+                <Link to="/registration/1">Step 1</Link>
               ) : (
                 "Step 1"
               )}
@@ -25,10 +25,18 @@ const Progress = () => {
           <div className={`${isSecondStep ? "step active" : "step"}`}>
             <div>2</div>
             <div>
-              {isThirdStep ? <Link to="/second">Step 2</Link> : "Step 2"}
+              {isThirdStep ? (
+                <Link to="/registration/2">Step 2</Link>
+              ) : (
+                "Step 2"
+              )}
             </div>
           </div>
-          <div className={`${pathname === "/third" ? "step active" : "step"}`}>
+          <div
+            className={`${
+              pathname === "/registration/3" ? "step active" : "step"
+            }`}
+          >
             <div>3</div>
             <div>Step 3</div>
           </div>
