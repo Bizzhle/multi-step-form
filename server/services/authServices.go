@@ -13,6 +13,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+
+
 func Register(c *fiber.Ctx) error {
 	data := new(types.RegisterDTO)
 
@@ -65,7 +67,6 @@ func Login(c *fiber.Ctx) error {
         })
     }
 
-	// println(user.UserPassword)
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.UserPassword), []byte(data.UserPassword)); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -73,18 +74,17 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	// if u.ID == 0 {
-	// 	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-	// 		"message": "User not found",
-	// 	})
-	// }
-
 	
-
 	token, err := utils.GenerateJWT(user.UserEmail)
 
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	if err := CreateSession(int(user.ID), token); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to create session",
+		})
 	}
 
 	return c.JSON(fiber.Map{
