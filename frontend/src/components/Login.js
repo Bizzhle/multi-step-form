@@ -19,7 +19,7 @@ const Login = () => {
       const response = await axios.post(`${BASE_API_URL}/auth/login`, data);
       setSuccessMessage("User with the provided credentials found");
       setUserDetails(response.data);
-      setData(response);
+      setData(response.data.user);
       navigate("/home");
     } catch (error) {
       if (error.response) {

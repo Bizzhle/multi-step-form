@@ -16,6 +16,7 @@ function Home() {
   return (
     <div>
       <p>Home</p>
+      <>{userData.FirstName}</>
     </div>
   );
 }
